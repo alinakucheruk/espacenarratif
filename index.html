@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Background and Button Style</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #444; /* Initial background color */
+            transition: background-color 0.5s ease;
+        }
+
+        .container {
+            position: relative;
+            text-align: center;
+        }
+
+        button {
+            font-size: 200px; /* Make the button very big initially */
+            background-color: #66cdaa; /* Initial button color */
+            color: #fff;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            position: absolute;
+        }
+
+        button:hover {
+            background-color: #ff6347; /* Hover color */
+            border-color: #ff6347;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <h1 id="h1">Try to catch button</h1>
+    <div class="container">
+        <button id="changeButton">Tap</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.getElementById('changeButton');
+            const h1 = document.getElementById('h1')
+
+            // Variable to keep track of the number of clicks
+            let clickCount = 0;
+
+            // Function to generate random position within the visible area of the screen
+            function randomPosition() {
+                const posX = Math.random() * (window.innerWidth - button.offsetWidth);
+                const posY = Math.random() * (window.innerHeight - button.offsetHeight);
+                return { top: posY + 'px', left: posX + 'px' };
+            }
+
+            // Function to generate random styles for the button
+            function randomStyles() {
+                const randomSize = Math.floor(Math.random() * 200) + 100; // Random size between 100px and 300px
+                const randomBorderRadius = Math.floor(Math.random() * 20) + 5; // Random border-radius between 5px and 25px
+                const randomBorderWidth = Math.floor(Math.random() * 5) + 1; // Random border width between 1px and 5px
+                return {
+                    width: randomSize + 'px',
+                    height: randomSize + 'px',
+                    borderRadius: randomBorderRadius + 'px',
+                    borderWidth: randomBorderWidth + 'px'
+                };
+            }
+
+            // Function to generate random background color
+            function randomBackgroundColor() {
+                const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16); // Random hex color code
+                document.body.style.backgroundColor = randomColor;
+            }
+
+            // Function to change button position, style, and background color
+            function changeStyle() {
+                clickCount++; // Increment click count
+
+                if (clickCount <= 10) {
+                    const position = randomPosition();
+                    const styles = randomStyles();
+
+                    // Decrease button size after each click
+                    const newSize = parseInt(button.style.width) - 5;
+                    button.style.width = newSize + 'px';
+                    button.style.height = newSize + 'px';
+
+                    if (newSize <= 0) {
+                        // Reset button size and count after it disappears
+                        button.style.width = '200px'; // Initial width
+                        button.style.height = '200px'; // Initial height
+                        clickCount = 0;
+                    } else {
+                        button.style.top = position.top;
+                        button.style.left = position.left;
+                        Object.assign(button.style, styles);
+                        randomBackgroundColor();
+                    }
+                }else{
+                        alert("After each try or year, we diminish in size, but our essence remains.");
+                    }
+
+                
+            }
+
+            // Add click event listener to the button
+            button.addEventListener('click', changeStyle);
+
+            // Initial style change
+            changeStyle();
+        });
+    </script>
+</body>
+</html>
